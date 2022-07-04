@@ -2,7 +2,7 @@ from time import perf_counter
 
 import numpy as np
 
-from cidre.correction import CIDRE
+from cidre.input import CIDRE
 
 
 def colored(r, g, b, text):

@@ -1,6 +1,13 @@
 import argparse
 
 
+class CIDRE:
+    """ CIDRE mode flags """
+    ZERO_PRESERVED = 0
+    RANGE_CORRECTED = 1
+    DIRECT = 2
+
+
 def cli_parser_config():
     """
     Configure CLI argument parser object.

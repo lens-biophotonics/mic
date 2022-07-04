@@ -5,6 +5,7 @@ import numpy as np
 import tifffile
 from skimage.transform import resize
 
+from cidre.input import CIDRE
 from cidre.printing import print_elapsed_time, print_heading, print_progress
 from cidre.utils import clear_from_memory
 
