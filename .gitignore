@@ -1,0 +1,7 @@
+# ignored folders
+test_stacks
+__pycache__/
+.vscode/
+
+# ignored files
+*.pyc
