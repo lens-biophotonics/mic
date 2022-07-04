@@ -5,10 +5,10 @@ from cidre.input import cli_parser_config, get_cli_input
 from cidre.utils import create_save_dir, create_stack_list
 
 
-def cidre(cli_parser):
+def cidre(cli_args):
 
     # retrieve command line input
-    source_path, dest_path, model_path, corr_mode, objective, wavelength = get_cli_input(cli_parser)
+    source_path, dest_path, model_path, corr_mode, objective, wavelength = get_cli_input(cli_args)
 
     # create save directory
     dest_path = create_save_dir(source_path, dest_path, objective, corr_mode)
@@ -22,4 +22,4 @@ def cidre(cli_parser):
 
 
 if __name__ == '__main__':
-    cidre(cli_parser_config())
+    cidre(cli_args=cli_parser_config())
