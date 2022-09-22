@@ -27,7 +27,7 @@ def cli_parser_config():
     """
     cli_parser = argparse.ArgumentParser(
         description='\n' +
-                    '\033[96mCIDRE microscopy illumination correction\033[0m\n'
+                    'CIDRE microscopy illumination correction\n'
                     'author:     Michele Sorelli (2022)\n'
                     'reference:  Smith et al.    (2014) - '
                     'CIDRE: an illumination-correction method '
