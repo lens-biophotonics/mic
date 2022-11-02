@@ -3,18 +3,12 @@ from time import perf_counter
 
 import numpy as np
 import tifffile
+from numba import njit
 from skimage.transform import resize
 
 from cidre.input import CIDRE
 from cidre.printing import print_elapsed_time, print_heading, print_progress
 from cidre.utils import clear_from_memory
-
-
-class CIDRE:
-    """ CIDRE mode flags """
-    ZERO_PRESERVED = 0
-    RANGE_CORRECTED = 1
-    DIRECT = 2
 
 
 def load_cidre_models(cidre_path, wave=[618, 482, -1], obj='zeiss25x',
@@ -25,7 +19,7 @@ def load_cidre_models(cidre_path, wave=[618, 482, -1], obj='zeiss25x',
 
     Parameters
     ----------
-    cidre_path:
+    cidre_path: str
         path to CIDRE model data files
 
     wave: list
@@ -36,13 +30,12 @@ def load_cidre_models(cidre_path, wave=[618, 482, -1], obj='zeiss25x',
 
     Returns
     -------
-    v: ndarray (shape=(512,512), dtype=float64)
+    v: numpy.ndarray (shape=(512,512), dtype=float64)
         spatial gain function
 
-    z: ndarray (shape=(512,512), dtype=float64)
-        spatial additive noise
+    z: numpy.ndarray (shape=(512,512), dtype=float64)
+        spatial offset function
     """
-
     # objective selection
     cidre_path = path.join(cidre_path, obj.lower())
 
@@ -78,22 +71,22 @@ def resize_cidre_models(v, z, slice_shape):
 
     Parameters
     ----------
-    v: ndarray (shape=(512,512), dtype=float)
+    v: numpy.ndarray (shape=(512,512), dtype=float)
         spatial gain function
 
-    z: ndarray (shape=(512,512), dtype=float)
-        spatial additive noise
+    z: numpy.ndarray (shape=(512,512), dtype=float)
+        spatial offset function
 
     slice_shape: tuple
         lateral (in-plane) shape of input image stacks
 
     Returns
     -------
-    v_res: ndarray (dtype=float)
+    v_res: numpy.ndarray (dtype=float)
         resized spatial gain function
 
-    z_res: ndarray (dtype=float)
-        resized spatial additive noise
+    z_res: numpy.ndarray (dtype=float)
+        resized spatial offset function
     """
     # if shapes do not match...
     model_shape = v.shape
@@ -103,31 +96,30 @@ def resize_cidre_models(v, z, slice_shape):
 
         # resize models, looping over channels
         for c in range(slice_shape[-1]):
-            v_res[..., c] = resize(v[..., c], slice_shape[:-1],
-                                   anti_aliasing=True, preserve_range=True)
-            z_res[..., c] = resize(z[..., c], slice_shape[:-1],
-                                   anti_aliasing=True, preserve_range=True)
+            v_res[..., c] = resize(v[..., c], slice_shape[:-1], anti_aliasing=True, preserve_range=True)
+            z_res[..., c] = resize(z[..., c], slice_shape[:-1], anti_aliasing=True, preserve_range=True)
+                                   
         return v_res, z_res
 
     else:
         return v, z
 
 
-def apply_cidre_models(slice_rgb, v, z, v_mean, z_mean,
-                       mode=CIDRE.ZERO_PRESERVED, ptype=np.float64):
+@njit(cache=True)
+def apply_cidre_to_slice(slice_rgb, v, z, v_mean, z_mean, mode=0, ptype=np.float64):
     """
     Apply CIDRE correction models to 2D RGB slice.
 
     Parameters
     ----------
-    slice_rgb: ndarray (y, x, c)
+    slice_rgb: numpy.ndarray (y, x, c)
         RGB slice
 
-    v: ndarray
-        gain model
+    v: numpy.ndarray
+        spatial gain model
 
-    z: ndarray
-        offset model
+    z: numpy.ndarray
+        spatial offset model
 
     v_mean: float
         mean gain value (computed once for efficiency's sake)
@@ -137,9 +129,14 @@ def apply_cidre_models(slice_rgb, v, z, v_mean, z_mean,
 
     mode: int
         correction mode flag
+        (0: zero-light preserved; 1: dynamic range corrected; 2: direct)
+
+    ptype: dtype
+        processing data type
 
     Returns
     -------
+    corr_slice: numpy.ndarray
         corrected RGB slice
     """
     # original conversion
@@ -149,19 +146,19 @@ def apply_cidre_models(slice_rgb, v, z, v_mean, z_mean,
     corr_slice = np.zeros_like(slice_rgb)
 
     # zero-light preserved
-    if mode == CIDRE.ZERO_PRESERVED:
+    if mode == 0:
         for c in range(3):
             if v_mean[c] != np.nan:
                 corr_slice[..., c] = z_mean[c] + v_mean[c] * (np.divide(slice_rgb[..., c] - z[..., c], v[..., c]))
 
     # dynamic range corrected
-    elif mode == CIDRE.RANGE_CORRECTED:
+    elif mode == 1:
         for c in range(3):
             if v_mean[c] != np.nan:
                 corr_slice[..., c] = v_mean[c] * (np.divide(slice_rgb[..., c] - z[..., c], v[..., c]))
 
     # direct correction
-    elif mode == CIDRE.DIRECT:
+    elif mode == 2:
         for c in range(3):
             if v_mean[c] != np.nan:
                 corr_slice[..., c] = np.divide(slice_rgb[..., c] - z[..., c], v[..., c])
@@ -169,9 +166,8 @@ def apply_cidre_models(slice_rgb, v, z, v_mean, z_mean,
     return corr_slice
 
 
-def correct_TPFM_illumination(stacks, model_path, dest_path,
-                              mode=CIDRE.ZERO_PRESERVED, wave=[618, 482, -1],
-                              obj='zeiss25x', pro_dtype=np.float64):
+def correct_tpfm_illumination(stacks, model_path, dest_path, mode=0,
+                              wave=[618, 482, -1], obj='zeiss25x', ptype=np.float64):
     """
     CIDRE-based illumination correction function.
 
@@ -180,23 +176,23 @@ def correct_TPFM_illumination(stacks, model_path, dest_path,
     stacks: list
         list of input stacks to be processed
 
-    model_path:
+    model_path: str
         path to CIDRE model data files
-        (default: /mnt/NASone/michele/CIDRE)
 
-    dest:
+    dest: str
         output path
 
     mode: int
         correction mode flag
+        (0: zero-light preserved; 1: dynamic range corrected; 2: direct)
 
     wave: list
-        RGB channels wavelengths [nm]
+        RGB channel wavelengths [nm]
 
-    obj: string
+    obj: str
         microscope objective employed (Zeiss or Nikon)
 
-    pro_dtype: dtype
+    ptype: dtype
         processing data type
 
     Returns
@@ -214,19 +210,17 @@ def correct_TPFM_illumination(stacks, model_path, dest_path,
     z_mean = np.mean(z, axis=(0, 1))
 
     # loop over input z-stacks
-    Nstack = len(stacks)
     loop_counter = 1
+    n_stack = len(stacks)
     tic = perf_counter()
     for s in stacks:
 
         # print progress
-        print_progress(loop_counter, Nstack)
+        print_progress(loop_counter, n_stack)
 
         # load z-stack
         vol_in = tifffile.imread(s)
         vshape = vol_in.shape
-        vdtype = vol_in.dtype
-        max_out = np.iinfo(vdtype).max
 
         # check if actually a stack
         if len(vshape) == 4:
@@ -234,15 +228,15 @@ def correct_TPFM_illumination(stacks, model_path, dest_path,
             # check if model resize is needed (once)
             v, z = resize_cidre_models(v, z, slice_shape=vshape[1:])
 
-            # loop over z-slices
-            vol_out = np.zeros_like(vol_in, dtype=pro_dtype)
+            # loop over z-slices, apply CIDRE correction
+            vol_out = np.zeros_like(vol_in, dtype=ptype)
             for d in range(vshape[0]):
-
-                # apply CIDRE correction
-                vol_out[d, ...] = apply_cidre_models(vol_in[d, ...], v, z,
-                                                     v_mean=v_mean, z_mean=z_mean, mode=mode, ptype=pro_dtype)
-
+                vol_out[d, ...] = \
+                    apply_cidre_to_slice(vol_in[d, ...], v, z, v_mean=v_mean, z_mean=z_mean, mode=mode, ptype=ptype)
+                                                       
             # truncate values
+            vdtype = vol_in.dtype
+            max_out = np.iinfo(vdtype).max
             vol_out = np.where(vol_out >= 0, vol_out, 0)
             vol_out = np.where(vol_out <= max_out, vol_out, max_out)
 
@@ -259,4 +253,4 @@ def correct_TPFM_illumination(stacks, model_path, dest_path,
         loop_counter += 1
 
     # print total time
-    print_elapsed_time(tic, Nstack)
+    print_elapsed_time(tic, n_stack)
