@@ -2,7 +2,7 @@ from os import makedirs, path, scandir
 import gc
 
 
-def create_save_dir(source, dest, objective, corr_mode):
+def create_save_dir(source, dest, objective, mode):
     """
     Create output directory.
 
@@ -15,8 +15,9 @@ def create_save_dir(source, dest, objective, corr_mode):
     dest:
         output path
 
-    corr_mode: int
+    mode: int
         correction mode flag
+        (0: zero-light preserved; 1: dynamic range corrected; 2: direct)
 
     Returns
     -------
@@ -26,13 +27,13 @@ def create_save_dir(source, dest, objective, corr_mode):
     if dest is None:
         if path.isfile(source) is True:
             dest = path.join(path.dirname(source), 'cidre_corrected_'
-                             + objective + '_mode' + str(corr_mode))
+                             + objective + '_mode' + str(mode))
         else:
             dest = path.join(source, 'cidre_corrected_'
-                             + objective + '_mode' + str(corr_mode))
+                             + objective + '_mode' + str(mode))
     else:
         dest = path.join(dest, 'cidre_corrected_'
-                         + objective + '_mode' + str(corr_mode))
+                         + objective + '_mode' + str(mode))
 
     if not path.isdir(dest):
         makedirs(dest)

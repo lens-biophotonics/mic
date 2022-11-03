@@ -1,18 +1,17 @@
 from os import path
-from time import perf_counter
 
 import numpy as np
 import tifffile
+from alive_progress import alive_bar
 from numba import njit
 from skimage.transform import resize
 
-from cidre.input import CIDRE
-from cidre.printing import print_elapsed_time, print_heading, print_progress
+from cidre.printing import print_heading
 from cidre.utils import clear_from_memory
 
 
 def load_cidre_models(cidre_path, wave=[618, 482, -1], obj='zeiss25x',
-                      mshape=(512, 512, 3), ch_name=['red', 'green', 'blue']):
+                      mshape=(512, 512, 3), ch_name=['R', 'G', 'B']):
     """
     Load CIDRE-based gain (v) and additive noise (z) terms from .txt data files
     (red and green channel components).
@@ -43,7 +42,7 @@ def load_cidre_models(cidre_path, wave=[618, 482, -1], obj='zeiss25x',
     v = np.empty(mshape)
     v[:] = np.nan
     z = v.copy()
-    print('  channels:  ', end='')
+    print('channels:  ', end='')
 
     # load CIDRE models (gain and additive terms, v and z)
     ch_corr = ''
@@ -52,15 +51,15 @@ def load_cidre_models(cidre_path, wave=[618, 482, -1], obj='zeiss25x',
             v_path = path.join(cidre_path, str(wave[c]), 'v.txt')
             z_path = path.join(cidre_path, str(wave[c]), 'z.txt')
             if c > 0:
-                ch_corr += '             '
+                ch_corr += '           '
             try:
                 v[..., c] = np.loadtxt(v_path, delimiter='\t')
                 z[..., c] = np.loadtxt(z_path, delimiter='\t')
             except Exception:
-                ch_corr += '{}\t({}nm not available! Skipping channel...)\n'.format(ch_name[c], str(wave[c]))
+                ch_corr += '{} ({}nm not available! Skipping channel...)\n'.format(ch_name[c], str(wave[c]))
             else:
-                ch_corr += ch_name[c] + '\t(' + str(wave[c]) + 'nm)\n'
-    print(ch_corr + '\n')
+                ch_corr += ch_name[c] + ' (' + str(wave[c]) + 'nm)\n'
+    print(ch_corr)
 
     return v, z
 
@@ -98,7 +97,7 @@ def resize_cidre_models(v, z, slice_shape):
         for c in range(slice_shape[-1]):
             v_res[..., c] = resize(v[..., c], slice_shape[:-1], anti_aliasing=True, preserve_range=True)
             z_res[..., c] = resize(z[..., c], slice_shape[:-1], anti_aliasing=True, preserve_range=True)
-                                   
+
         return v_res, z_res
 
     else:
@@ -210,47 +209,43 @@ def correct_tpfm_illumination(stacks, model_path, dest_path, mode=0,
     z_mean = np.mean(z, axis=(0, 1))
 
     # loop over input z-stacks
-    loop_counter = 1
     n_stack = len(stacks)
-    tic = perf_counter()
-    for s in stacks:
+    with alive_bar(n_stack, title='z-stack', length=31) as bar:
+        for s in stacks:
 
-        # print progress
-        print_progress(loop_counter, n_stack)
+            # load z-stack
+            vol_in = tifffile.imread(s)
+            vshape = vol_in.shape
 
-        # load z-stack
-        vol_in = tifffile.imread(s)
-        vshape = vol_in.shape
+            # check if actually a stack
+            if len(vshape) == 4:
 
-        # check if actually a stack
-        if len(vshape) == 4:
+                # check if model resize is needed (once)
+                v, z = resize_cidre_models(v, z, slice_shape=vshape[1:])
 
-            # check if model resize is needed (once)
-            v, z = resize_cidre_models(v, z, slice_shape=vshape[1:])
+                # loop over z-slices, apply CIDRE correction
+                vol_out = np.zeros_like(vol_in, dtype=ptype)
+                for d in range(vshape[0]):
+                    vol_out[d, ...] = \
+                        apply_cidre_to_slice(vol_in[d, ...], v, z, v_mean=v_mean, z_mean=z_mean, mode=mode, ptype=ptype)
 
-            # loop over z-slices, apply CIDRE correction
-            vol_out = np.zeros_like(vol_in, dtype=ptype)
-            for d in range(vshape[0]):
-                vol_out[d, ...] = \
-                    apply_cidre_to_slice(vol_in[d, ...], v, z, v_mean=v_mean, z_mean=z_mean, mode=mode, ptype=ptype)
-                                                       
-            # truncate values
-            vdtype = vol_in.dtype
-            max_out = np.iinfo(vdtype).max
-            vol_out = np.where(vol_out >= 0, vol_out, 0)
-            vol_out = np.where(vol_out <= max_out, vol_out, max_out)
+                # truncate values
+                vdtype = vol_in.dtype
+                max_out = np.iinfo(vdtype).max
+                vol_out = np.where(vol_out >= 0, vol_out, 0)
+                vol_out = np.where(vol_out <= max_out, vol_out, max_out)
 
-            # convert back to input data type
-            vol_out = vol_out.astype(vdtype)
+                # convert back to input data type
+                vol_out = vol_out.astype(vdtype)
 
-            # save corrected volume
-            tifffile.imwrite(path.join(dest_path, path.basename(s)), vol_out)
+                # save corrected volume
+                tifffile.imwrite(path.join(dest_path, path.basename(s)), vol_out)
 
-        # clear input stack from memory
-        clear_from_memory(vol_in)
+            # clear input stack from memory
+            clear_from_memory(vol_in)
 
-        # increase counter
-        loop_counter += 1
+            # advance progress bar
+            bar()
 
-    # print total time
-    print_elapsed_time(tic, n_stack)
+    # skip line and exit
+    print('\n')
