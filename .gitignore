@@ -1,7 +1,3 @@
-# ignored folders
-test_stacks
-__pycache__/
-.vscode/
-
-# ignored files
-*.pyc
+version https://git-lfs.github.com/spec/v1
+oid sha256:3173346d93733ae2c75d26d2b0c7067b971c7a5fe6687df08b878c44908f9403
+size 75
