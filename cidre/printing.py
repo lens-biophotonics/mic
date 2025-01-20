@@ -1,29 +1,3 @@
-def colored(r, g, b, text):
-    return "\033[38;2;{};{};{}m{} \033[38;2;255;255;255m".format(r, g, b, text)
-
-
-def print_heading(mode, obj='zeiss25x'):
-    """
-    Print script heading.
-
-    Parameters
-    ----------
-    mode: int
-        selected CIDRE correction mode
-
-    Returns
-    -------
-    None
-    """
-    hdr_str = colored(0, 191, 255, "\nCIDRE microscopy illumination correction")
-
-    if mode == 0:
-        hdr_str += '\n\nmode:      zero-light preserved'
-    elif mode == 1:
-        hdr_str += '\n\nmode:      dynamic range corrected'
-    elif mode == 2:
-        hdr_str += '\n\nmode:      direct'
-
-    hdr_str += '\nobjective: ' + obj.capitalize()
-
-    print(hdr_str)
+version https://git-lfs.github.com/spec/v1
+oid sha256:5cdde026b5903511c687cf48a3573351ea0a21bd797f782971b17a3164ccb73c
+size 682
