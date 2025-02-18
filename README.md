@@ -49,8 +49,9 @@ To install the MIC tool for 3D microscopy illumination correction, follow the in
     /path/to/local/dir$ mic --help
     ```
 
-
-
+## Documentation
+Please read the full documentation at this page:
+https://lens-biophotonics.github.io/mic/
 
 ## References
 
