@@ -1,3 +1,12 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ce2f802a58205aed6afe67361f360799de371d8cf9eaa5af3da862962e258304
-size 113
+# ignored folders
+__pycache__/
+*.egg-info/
+.idea
+.vscode/
+build/
+dist/
+test_stacks/
+venv/
+
+# ignored files
+*.pyc

@@ -6,7 +6,7 @@
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = source
-BUILDDIR      = build
+BUILDDIR      = _build
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -16,11 +16,11 @@ help:
 
 html: Makefile generate_rst
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
-	cp ../dist/mic-`python -c 'import mic; print(mic.__version__)'`-py3-none-any.whl build/html
-	sed -i 's|docs/_static|_static|' build/html/index.html
+	cp ../dist/mic-`python -c 'import mic; print(mic.__version__)'`-py3-none-any.whl _build/html
+	sed -i 's|docs/_static|_static|' _build/html/index.html
 
 generate_rst:
 	sphinx-apidoc -faM --separate -o generated ../mic
 
 clean:
-	rm -fr build generated
+	rm -fr _build generated

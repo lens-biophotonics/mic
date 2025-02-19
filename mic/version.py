@@ -1,3 +1,27 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:e0caa5b2270eafe3ad8e2e64ed0dfdc7770bee689272a9c2125e6dbe7cdf93bc
-size 474
+major = 0
+minor = 1
+micro = 0
+
+pre_release = None
+post_release = None
+dev_release = None
+
+__version__ = ''
+
+if major is not None:
+    __version__ += f'{major}'
+
+if minor is not None:
+    __version__ += f'.{minor}'
+
+if micro is not None:
+    __version__ += f'.{micro}'
+
+if pre_release is not None:
+    __version__ += f'{pre_release}'
+
+if post_release is not None:
+    __version__ += f'.post{post_release}'
+
+if dev_release is not None:
+    __version__ += f'.dev{dev_release}'

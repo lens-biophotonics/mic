@@ -1,3 +1,5 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:06d47d38bc1e7936af394e7c6526eacce5ef075dcbde902db8095e00806be710
-size 43
+joblib
+numpy
+pathlib
+scikit-image
+tifffile
