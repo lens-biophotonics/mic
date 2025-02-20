@@ -5,8 +5,7 @@ import tifffile as tiff
 from joblib import Parallel, delayed
 from skimage.transform import resize
 
-from mic.printing import print_heading
-from mic.utils import create_memory_map, get_available_cores, delete_tmp_data
+from mic.utils import create_memory_map, get_available_cores, delete_tmp_data, print_heading
 
 
 def load_illumination_models(field_path, wl=(618, 482, -1), obj='tpfm_zeiss25x'):

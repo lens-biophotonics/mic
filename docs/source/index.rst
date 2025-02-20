@@ -1,4 +1,4 @@
-Welcome to mic's documentation!
+Welcome to *MiC*'s documentation!
 ===============================
 
 .. toctree::
