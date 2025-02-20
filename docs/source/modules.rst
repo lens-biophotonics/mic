@@ -6,5 +6,4 @@ Python module index
 
    correction
    input
-   printing
    utils

@@ -16,7 +16,6 @@ help:
 
 html: Makefile generate_rst
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
-	cp ../dist/mic-`python -c 'import mic; print(mic.__version__)'`-py3-none-any.whl _build/html
 	sed -i 's|docs/_static|_static|' _build/html/index.html
 
 generate_rst:

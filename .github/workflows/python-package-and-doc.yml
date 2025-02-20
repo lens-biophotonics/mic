@@ -10,21 +10,21 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.12
+    - name: Set up Python 3.11
       uses: actions/setup-python@v2
       with:
-        python-version: 3.12
-    - uses: actions/cache@v2
+        python-version: 3.11
+    - uses: actions/cache@v4
       with:
         path: ${{ env.pythonLocation }}
         key: ${{ runner.os }}-pip-${{ hashFiles('./requirements.txt', './requirements-dev.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
-    - uses: actions/cache@v2
+    - uses: actions/cache@v4
       with:
         path: ~/.local
         key: ${{ runner.os }}-pip-${{ hashFiles('./requirements.txt', './requirements-dev.txt') }}
@@ -36,8 +36,6 @@ jobs:
         pip install . && mic -h
         pip uninstall -y mic
         pip install -r requirements-dev.txt
-    - name: Build wheel
-      run: pip install wheel && make
     - name: sphinx
       working-directory: ./docs
       env:
@@ -47,6 +45,6 @@ jobs:
       uses: crazy-max/ghaction-github-pages@v2.2.0
       if: github.ref == 'refs/heads/main'
       with:
-        build_dir: docs/build/html
+        build_dir: docs/_build/html
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
