@@ -95,7 +95,7 @@ def create_save_dir(source, dest, obj, mode):
     return dest
 
 
-def create_stack_list(source):
+def create_stack_list(source, format=['tif', 'tiff']):
     """
     Create list of input stack paths.
 
@@ -108,6 +108,9 @@ def create_stack_list(source):
     -------
     stacks: list
         list of input stacks to be processed
+    
+    fmt: list (dtype=str)
+        list of input file formats
     """
     # single-stack
     if Path.is_file(source):
@@ -117,7 +120,7 @@ def create_stack_list(source):
     else:
         stacks = []
         for path in Path(source).glob('*'):
-            if path.is_file() and (path.name.endswith('tif') or path.name.endswith('tiff')):
+            if path.is_file() and any(str(path).lower().endswith(fmt) for fmt in format):
                 stacks.append(source / path.name)
 
     return stacks

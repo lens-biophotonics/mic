@@ -35,25 +35,25 @@ def cli_parser_config():
                             help='output path')
     cli_parser.add_argument('-f', '--field', dest='field_path',
                             default='models/',
-                            help='path to flat- and dark-field models (v.txt and z.txt, respectively): '
+                            help='path to flat- and dark-field models (v.tif and z.tif, respectively): '
                                  'these must be placed inside folders named after the corresponding wavelength, '
                                  'within another parent folder named after the employed objective, e.g.:\n'
                                  '/\n'
                                  '└──models/\n'
                                  '   └── zeiss25x\n'
                                  '          ├── 482/\n'
-                                 '          |    ├── v.txt\n'
-                                 '          |    └── z.txt\n'
+                                 '          |    ├── v.tif\n'
+                                 '          |    └── z.tif\n'
                                  '          └── 618/\n'
-                                 '               ├── v.txt\n'
-                                 '               └── z.txt\n')
+                                 '               ├── v.tif\n'
+                                 '               └── z.tif\n')
     cli_parser.add_argument('-o', '--objective', dest='objective',
                             default='tpfm_zeiss25x',
                             help='employed objective, either \'tpfm_zeiss25x\', ' +
                                  '\'tpfm_nikon10x\', \'tpfm_nikon20x\', or \'lsfm_lavision12x_dskwd\'')
     cli_parser.add_argument('-w', '--wavelength', dest='wavelength',
                             default=[618, 482, -1],
-                            nargs='+', type=int,
+                            nargs='+',
                             help='corrected colors: scalar value for grayscale image stacks or 3-element list for '
                                  'RGB files (set single elements to -1 to skip the corresponding channel correction) ')
     cli_parser.add_argument('-m', '--mode', dest='mode',
@@ -68,6 +68,10 @@ def cli_parser_config():
                                  u'\t    v\u0304\u00B7(I - z)/v\n'
                                  '2 \u2192 direct:'
                                  u'\t\t\t      (I - z)/v\t')
+    cli_parser.add_argument('--fmt', dest='fmt',
+                            default=['tif', 'tiff'],
+                            nargs='+', type=str,
+                            help='input image formats')
 
     cli_args = cli_parser.parse_args()
 
@@ -88,6 +92,9 @@ def get_cli_input(cli_args):
     source: pathlib Path object
         source path
         (single stack file or directory including multiple stacks)
+
+    fmt: list (dtype=str)
+        list of input file formats
 
     dest: pathlib Path object
         output path
@@ -113,5 +120,8 @@ def get_cli_input(cli_args):
     mode = cli_args.mode
     obj = cli_args.objective
     wl = cli_args.wavelength
+    fmt = cli_args.fmt    
+    if not isinstance(fmt, list):
+        fmt = [fmt]
 
-    return source, dest, field, mode, obj, wl
+    return source, fmt, dest, field, mode, obj, wl

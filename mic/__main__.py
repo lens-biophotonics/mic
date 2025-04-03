@@ -6,13 +6,13 @@ from mic.utils import create_save_dir, create_stack_list
 def mic(cli_args):
 
     # retrieve command line arguments
-    source, dest, fields, mode, obj, wl = get_cli_input(cli_args)
+    source, fmt, dest, fields, mode, obj, wl = get_cli_input(cli_args)
 
     # create output directory
     dest_dir = create_save_dir(source, dest, obj, mode)
 
     # generate list of stack filenames
-    stacks = create_stack_list(source)
+    stacks = create_stack_list(source, format=fmt)
 
     # correct illumination using available flat/dark-field models
     correct_microscopy_dset(stacks, fields, dest_dir, mode=mode, wl=wl, obj=obj, ptype=float)
