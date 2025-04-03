@@ -38,7 +38,7 @@ def load_illumination_models(field_path, wl=(618, 482, -1), obj='tpfm_zeiss25x')
     v_lst = []
     z_lst = []
     for c, w in enumerate(wl):
-        if w > 0:
+        if w != -1:
             v_path = field_path / str(w) / 'v.tif'
             z_path = field_path / str(w) / 'z.tif'
             if c > 0:
@@ -256,6 +256,12 @@ def correct_zstack(stack, v, z, v_mean, z_mean, mode, ptype, dest, jobs=1):
     # load z-stack
     img_in = tiff.imread(stack)
 
+    """
+    TODO:
+    - add support for both channel-first and channel-last RGB z-stacks
+    - only channel-last z-stacks are supported now...
+    """
+
     # resize illumination model arrays, if required
     v, z = resize_illumination_models(v, z, out_shape=img_in.shape[1:3])
 
@@ -276,8 +282,9 @@ def correct_zstack(stack, v, z, v_mean, z_mean, mode, ptype, dest, jobs=1):
     img_out = np.where(img_out >= 0, img_out, 0)
     img_out = np.where(img_out <= max_out, img_out, max_out)
     img_out = img_out.astype(img_in.dtype)
+    metadata = {'axes': 'ZYX'} if img_out.ndim == 3 else {'axes': 'ZYXC'}
 
     # save corrected z-stack (with compression) and erase temporary files
     print(' Saving compressed z-stack...')
-    tiff.imwrite(dest / stack.name, img_out, compression='zlib', compressionargs={'level': 9})
+    tiff.imwrite(dest / stack.name, img_out, metadata=metadata, compression='zlib', compressionargs={'level': 9})
     delete_tmp_data(tmp_path, img_out)
