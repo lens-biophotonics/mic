@@ -172,6 +172,13 @@ def get_available_cores():
     return num_cpu
 
 
+def ensure_three_axes(array):
+    if array.ndim == 3:
+        return array
+    else:
+        return np.expand_dims(array, axis=-1)
+
+
 def colored(r, g, b, text):
     return f'\033[38;2;{r};{g};{b}m{text} \033[38;2;255;255;255m'
 

@@ -5,7 +5,7 @@ import tifffile as tiff
 from joblib import Parallel, delayed
 from skimage.transform import resize
 
-from mic.utils import create_memory_map, get_available_cores, delete_tmp_data, print_heading
+from mic.utils import create_memory_map, ensure_three_axes, get_available_cores, delete_tmp_data, print_heading
 
 
 def load_illumination_models(field_path, wl=(618, 482, -1), obj='tpfm_zeiss25x'):
@@ -97,8 +97,8 @@ def resize_illumination_models(v, z, out_shape):
     """
     # if shapes do not match...
     if out_shape != v.shape[:-1]:
-        v_rsz = np.zeros(out_shape)
-        z_rsz = np.zeros(out_shape)
+        v_rsz = ensure_three_axes(np.zeros(out_shape))
+        z_rsz = v_rsz.copy()
 
         # resize models, looping over available wavelengths
         for c in range(v.shape[-1]):
