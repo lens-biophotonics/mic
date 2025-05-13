@@ -96,11 +96,14 @@ def resize_illumination_models(v, z, out_shape):
         resized spatial offset function
     """
     # if shapes do not match...
+    nch = v.shape[-1]
     if out_shape != v.shape[:-1]:
         v_rsz = ensure_three_axes(np.zeros(out_shape))
         z_rsz = v_rsz.copy()
 
         # resize models, looping over available wavelengths
+        v_rsz = np.repeat(v_rsz, nch, axis=-1)
+        z_rsz = np.repeat(z_rsz, nch, axis=-1)
         for c in range(v.shape[-1]):
             v_rsz[..., c] = resize(v[..., c], out_shape, anti_aliasing=True, preserve_range=True)
             z_rsz[..., c] = resize(z[..., c], out_shape, anti_aliasing=True, preserve_range=True)
