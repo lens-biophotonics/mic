@@ -5,7 +5,9 @@ import tifffile as tiff
 from joblib import Parallel, delayed
 from skimage.transform import resize
 
-from mic.utils import create_memory_map, ensure_three_axes, get_available_cores, delete_tmp_data, print_heading
+from mic.utils import (
+    convert_to_float_and_rescale, create_memory_map, ensure_three_axes,
+    get_available_cores, delete_tmp_data, print_heading)
 
 
 def load_illumination_models(field_path, wl=(618, 482, -1), obj='tpfm_zeiss25x'):
@@ -44,12 +46,12 @@ def load_illumination_models(field_path, wl=(618, 482, -1), obj='tpfm_zeiss25x')
             if c > 0:
                 ch_corr += '           '
             try:
-                v_lst.append(tiff.imread(v_path))
+                v_lst.append(convert_to_float_and_rescale(tiff.imread(v_path)))
                 z_lst.append(tiff.imread(z_path))
             except ValueError:
                 ch_corr += f'{ch_name[c]} ({w}nm not available! Skipping channel...)'
             else:
-                ch_corr += f'{ch_name[c]} ({w}nm)'
+                ch_corr += f'{ch_name[c]} ({w}nm)\n'
         else:
             v_lst.append(None)
             z_lst.append(None)

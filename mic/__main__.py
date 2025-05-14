@@ -12,7 +12,7 @@ def mic(cli_args):
     dest_dir = create_save_dir(source, dest, obj, mode)
 
     # generate list of stack filenames
-    stacks = create_stack_list(source, format=fmt)
+    stacks = create_stack_list(source, fmt=fmt)
 
     # correct illumination using available flat/dark-field models
     correct_microscopy_dset(stacks, fields, dest_dir, mode=mode, wl=wl, obj=obj, ptype=float)

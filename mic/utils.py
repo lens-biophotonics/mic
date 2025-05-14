@@ -10,6 +10,25 @@ import numpy as np
 from joblib import dump, load
 
 
+def convert_to_float_and_rescale(img):
+    """
+    Optionally converts an image to float32 and rescales to [0, 1] if it is of integer type.
+    
+    Parameters:
+        image (np.ndarray): Input image as a NumPy array.
+    
+    Returns:
+        np.ndarray: Processed image with float32 type and values in [0, 1] if originally int;
+                    otherwise, returns the original image unchanged.
+    """
+    if np.issubdtype(img.dtype, np.integer):
+        info = np.iinfo(img.dtype)
+        return img.astype(np.float32) / info.max
+
+    return img
+    
+    
+    
 def create_memory_map(dtype, shape=None, name='tmp', tmp=None, arr=None, mmap_mode='w+'):
     """
     Create a memory-map to an array stored in a binary file on disk.
@@ -95,7 +114,7 @@ def create_save_dir(source, dest, obj, mode):
     return dest
 
 
-def create_stack_list(source, format=['tif', 'tiff']):
+def create_stack_list(source, fmt=('tif', 'tiff')):
     """
     Create list of input stack paths.
 
@@ -103,6 +122,9 @@ def create_stack_list(source, format=['tif', 'tiff']):
     ----------
     source:
         source path (single stack file or directory including multiple stacks)
+
+    fmt: tuple
+        image stack formats
 
     Returns
     -------
@@ -120,7 +142,7 @@ def create_stack_list(source, format=['tif', 'tiff']):
     else:
         stacks = []
         for path in Path(source).glob('*'):
-            if path.is_file() and any(str(path).lower().endswith(fmt) for fmt in format):
+            if path.is_file() and any(str(path).lower().endswith(fmt) for fmt in fmt):
                 stacks.append(source / path.name)
 
     return stacks
