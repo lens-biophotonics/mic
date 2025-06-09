@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installation &mdash; mic 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="https://docs.python.org/3/_static/copybutton.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Python module index" href="modules.html" />
+    <link rel="prev" title="Welcome to MiC’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> mic
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#complete-workflow-description">Complete workflow description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Python module index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Installation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tutorial.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installation">
+<span id="id1"></span><h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h1>
+<p>To use the <em>MiC</em> tool for 3D microscopy illumination correction, follow the instructions below.</p>
+<ol class="arabic">
+<li><p>Download and install the latest Python 3 version: <a class="reference external" href="https://www.python.org/downloads/">https://www.python.org/downloads/</a></p></li>
+<li><p>Download and install git: <a class="reference external" href="https://git-scm.com/downloads">https://git-scm.com/downloads/</a></p></li>
+<li><p>Clone the <em>MiC</em> code repository inside a local folder:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">/path/to/local/dir$ git clone git@github.com:lens-biophotonics/mic.git</span>
+</pre></div>
+</div>
+</li>
+<li><p>Create a virtual Python environment using the venv module:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">/path/to/local/dir$ python -m venv .mic_venv</span>
+</pre></div>
+</div>
+</li>
+<li><p>Activate the environment:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">/path/to/local/dir$ source .mic_venv/bin/activate   (Linux)</span>
+<span class="go">/path/to/local/dir&gt; .mic_venv\Scripts\activate      (Windows)</span>
+</pre></div>
+</div>
+</li>
+<li><p>Install the wheel command line tool using pip:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(.mic_venv)</span> <span class="go">/path/to/local/dir$ pip install wheel</span>
+</pre></div>
+</div>
+</li>
+<li><p>Build a Python wheel file:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(.mic_venv)</span> <span class="go">/path/to/local/dir$ python setup.py bdist_wheel</span>
+</pre></div>
+</div>
+</li>
+<li><p>Install the wheel file by executing:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(.mic_venv)</span> <span class="go">/path/to/local/dir$ pip install dist/mic-0.1.0-py3-none-any.whl</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="complete-workflow-description">
+<h1>Complete workflow description<a class="headerlink" href="#complete-workflow-description" title="Permalink to this heading">¶</a></h1>
+<p><em>MiC</em> is an intuitive tool designed to efficiently correct uneven illumination in image stacks acquired through 3D fluorescence microscopy,
+i.e., two-photon fluorescence microscopy (TPFM) or light sheet fluorescence microscopy (LSFM).
+It achieves this by leveraging flat- and dark-field models estimated using retrospective illumination-correction methods.
+This tutorial focuses on the CIDRE technique (<em>Corrected Intensity Distributions using Regularized Energy minimization</em>; <a class="reference external" href="https://www.nature.com/articles/nmeth.3323">Smith et al., 2015</a>).
+However, while the key assumptions discussed pertain specifically to CIDRE, this workflow may consider other retrospective correction approaches, such as BaSiC (<a class="reference external" href="https://www.nature.com/articles/ncomms14836">Peng et al., 2017</a>).
+The workflow consists of three main steps: (1) generating a dataset of uncorrelated 2D images for various wavelengths of interest from z-stacks previously acquired using different objectives;
+(2) identifying optimal flat- and dark-field models with CIDRE (or BaSiC); and (3) applying the <em>MiC</em> tool to perform illumination correction based on the newly estimated models.
+Each step is described in detail below.</p>
+<ol class="arabic">
+<li><dl>
+<dt><strong>2D image dataset generation</strong></dt><dd><p>The Python notebook included in <em>mic/notebooks</em> (<em>create_cidre_dset.ipynb</em>) can be used to generate or expand the reference dataset of 2D images used to identify and/or update the illumination models
+related to a specific objective at a particular emission wavelength. This notebook can be run within the same virtual environment created upon installation.
+Users must adapt the source and output directories (i.e., <code class="docutils literal notranslate"><span class="pre">source</span></code> and <code class="docutils literal notranslate"><span class="pre">outdir</span></code>) within the second cell of the notebook and, if necessary, modify the default inclusion criteria specified in the third cell:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bg_lvl</span></code>: (approximate) dark background intensity</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bg_rel_thr</span></code>: relative number of sub-threshold background pixels (below <code class="docutils literal notranslate"><span class="pre">bg_lvl</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mean_rel_thr</span></code>: mean intensity relative to the data type maximum</p></li>
+</ul>
+</div></blockquote>
+<p>When applying CIDRE, the following assumptions should be considered and met:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>images should not be highly correlated, as this can cause significant artifacts in the identified illumination models and, consequently, in the final corrected image stacks (e.g., when using time-lapse images and/or adjacent z-slices of the same tissue ROI). Combining images from different sites can help mitigate this issue;</p></li>
+<li><p>CIDRE performs best with a large number of images containing ample (i.e., not sparse) intensity information that covers the entire field of view for each corrected color;</p></li>
+<li><p>CIDRE requires 1,000 or more uncorrelated images to match or surpass the performance achieved by gold-standard prospective methods (which depend on ad hoc calibration images).</p></li>
+</ul>
+</div></blockquote>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><strong>CIDRE-based flat-field and dark-field estimation</strong></dt><dd><p>The source code of CIDRE (available as a MATLAB script and a Java Fiji plugin) is freely provided as Supplementary Software in Smith’s publication.</p>
+<p>You can download it using the following link: <a class="reference external" href="https://static-content.springer.com/esm/art%3A10.1038%2Fnmeth.3323/MediaObjects/41592_2015_BFnmeth3323_MOESM177_ESM.zip">CIDRE source code</a>.</p>
+<p>CIDRE must be run separately on each folder containing a reference image dataset collected for a specific objective and emission wavelength of interest.
+A detailed explanation of its usage can be found in the <em>cidre.m</em> file, which includes the definition of the MATLAB function to be executed in the command window.</p>
+<p>The flat-field and dark-field images can be extracted from the <code class="docutils literal notranslate"><span class="pre">v</span></code> and <code class="docutils literal notranslate"><span class="pre">z</span></code> fields of the <code class="docutils literal notranslate"><span class="pre">MODEL</span></code> dictionary returned by this function.
+These fields should be exported as <code class="docutils literal notranslate"><span class="pre">.mat</span></code> MATLAB files and then converted to <code class="docutils literal notranslate"><span class="pre">.tif</span></code> images. This conversion can be easily performed in Python using <em>SciPy</em> and <em>tifffile</em>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scipy.io</span>
+<span class="kn">import</span> <span class="nn">tifffile</span> <span class="k">as</span> <span class="nn">tiff</span>
+
+
+<span class="n">v</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="s1">&#39;v.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;v&#39;</span><span class="p">]</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="s1">&#39;z.mat&#39;</span><span class="p">)[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span>
+
+<span class="n">tiff</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s1">&#39;v.tif&#39;</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+<span class="n">tiff</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s1">&#39;z.tif&#39;</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The CIDRE illumination-correction tool requires input images of consistent shape for each color corresponding to a specific objective.
+For instance, when attempting to estimate the flat- and dark-field models of the LaVision 12X objective in Lab 31A, all images must have a size of 2048×2048 pixels.
+Naturally, this will dictate how the final illumination models are shaped.
+However, since MiC appropriately resizes them upon correction, they can be used to process z-stacks of different sizes.
+For instance, 1024×1024 images taken with the same LaVision objective (using pixel binning) can be corrected with the same 2048×2048 pixel flat-field.</p>
+<p>Sample flat-field models, identified for three different objectives at separate emission wavelengths are shown below,
+along with an example of illumination correction applied to a TPFM image stack acquired using a Zeiss 25X objective (adapted from <a class="reference external" href="https://www.nature.com/articles/s41598-023-30953-w">Sorelli et al., 2023</a>).</p>
+<a class="reference internal image-reference" href="_images/ff_ex.png"><img alt="_images/ff_ex.png" class="align-center" src="_images/ff_ex.png" style="width: 800px;" /></a>
+</dd>
+</dl>
+</li>
+<li><p><strong>Illumination correction with identified flat- and dark-field models: usage examples</strong></p>
+<blockquote>
+<div><ul>
+<li><p>Apply a <em>dynamic-range-adjusted</em> correction to multiple RGB image stacks, using the illumination models obtained for the TPFM setup in Lab 43 when using a Zeiss 25X objective with the listed emission wavelengths (do not correct the blue channel):</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(.mic_venv)</span> <span class="go">/path/to/local/dir$ mic /path/to/stacks_dir --field /path/to/illumination/models --objective tpfm_zeiss25x --wavelength 618 482 -1 --mode 1</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Apply a <em>zero-light-preserved</em> correction to a single grayscale image stack acquired using the TPFM setup with a Nikon 10X objective:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(.mic_venv)</span> <span class="go">/path/to/local/dir$ mic /path/to/stack.tif --field /path/to/illumination/models --objective tpfm_nikon10x --wavelength 488 --mode 0</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p><em>NOTE</em>: the tool’s help documentation outlines the mandatory structure required for the folder including the flat- and dark-field models identified for particular objectives at different wavelengths; this can be accessed by running:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(.mic_venv)</span> <span class="go">/path/to/local/dir$ mic --help</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ol>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to MiC’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="modules.html" class="btn btn-neutral float-right" title="Python module index" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Michele Sorelli.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

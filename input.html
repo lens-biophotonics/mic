@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mic.input &mdash; mic 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="https://docs.python.org/3/_static/copybutton.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="mic.utils" href="utils.html" />
+    <link rel="prev" title="mic.correction" href="correction.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> mic
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html#complete-workflow-description">Complete workflow description</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Python module index</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="correction.html">mic.correction</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">mic.input</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mic.input.CustomFormatter"><code class="docutils literal notranslate"><span class="pre">CustomFormatter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mic.input.cli_parser_config"><code class="docutils literal notranslate"><span class="pre">cli_parser_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mic.input.get_cli_input"><code class="docutils literal notranslate"><span class="pre">get_cli_input()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">mic.utils</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">Python module index</a> &raquo;</li>
+      <li>mic.input</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/input.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-mic.input">
+<span id="mic-input"></span><h1>mic.input<a class="headerlink" href="#module-mic.input" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="mic.input.CustomFormatter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mic.input.</span></span><span class="sig-name descname"><span class="pre">CustomFormatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prog</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent_increment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_help_position</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">24</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mic.input.CustomFormatter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mic.input.cli_parser_config">
+<span class="sig-prename descclassname"><span class="pre">mic.input.</span></span><span class="sig-name descname"><span class="pre">cli_parser_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mic.input.cli_parser_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure CLI argument parser object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>command line arguments</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>cli_args</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mic.input.get_cli_input">
+<span class="sig-prename descclassname"><span class="pre">mic.input.</span></span><span class="sig-name descname"><span class="pre">get_cli_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cli_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mic.input.get_cli_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get CLI input arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cli_args</strong> – command line arguments</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>source</strong> (<em>pathlib Path object</em>) – source path
+(single stack file or directory including multiple stacks)</p></li>
+<li><p><strong>fmt</strong> (<em>list (dtype=str)</em>) – list of input file formats</p></li>
+<li><p><strong>dest</strong> (<em>pathlib Path object</em>) – output path</p></li>
+<li><p><strong>field</strong> (<em>pathlib Path object</em>) – path to illumination models</p></li>
+<li><p><strong>mode</strong> (<em>int</em>) – correction mode (see help documentation)</p></li>
+<li><p><strong>obj</strong> (<em>str</em>) – employed objective</p></li>
+<li><p><strong>wl</strong> (<em>int or list of int</em>) – channel wavelengths [nm]</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="correction.html" class="btn btn-neutral float-left" title="mic.correction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="utils.html" class="btn btn-neutral float-right" title="mic.utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Michele Sorelli.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
